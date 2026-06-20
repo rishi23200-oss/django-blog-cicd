@@ -56,7 +56,7 @@ docker push YOUR_DOCKERHUB_USERNAME/django-blog:latest
 ```
 
 ### Frontend (Netlify)
-- Netlify Link: (add after deploy)
+- Netlify Link: https://gleaming-kangaroo-44a074.netlify.app
 
 ### Backend (AWS Kubernetes)
 - AWS Backend URL: (add after deploy)
