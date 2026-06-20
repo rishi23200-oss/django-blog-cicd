@@ -1,0 +1,45 @@
+# Install via Helm — run these commands after setting up your cluster:
+#
+# helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+# helm repo add grafana https://grafana.github.io/helm-charts
+# helm repo update
+#
+# helm install prometheus prometheus-community/kube-prometheus-stack \
+#   --namespace monitoring --create-namespace \
+#   --set grafana.adminPassword=admin123
+#
+# helm install loki grafana/loki-stack \
+#   --namespace monitoring \
+#   --set promtail.enabled=true \
+#   --set loki.persistence.enabled=true \
+#   --set loki.persistence.size=5Gi
+#
+# Access Grafana:
+#   kubectl port-forward svc/prometheus-grafana 3000:80 -n monitoring
+#   Open http://localhost:3000  (admin / admin123)
+#   Add Loki data source: http://loki:3100
+#
+# The Promtail DaemonSet will automatically scrape all pod logs including Django.
+# In Grafana → Explore → Loki → query:  {namespace="default", app="django-blog"}
+
+---
+# Optional: ServiceMonitor so Prometheus scrapes Django metrics
+# (requires django-prometheus pip package added to requirements.txt)
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: django-blog-monitor
+  namespace: monitoring
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: django-blog
+  namespaceSelector:
+    matchNames:
+      - default
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 30s

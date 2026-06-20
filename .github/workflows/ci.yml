@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: blogdb
+          POSTGRES_USER: bloguser
+          POSTGRES_PASSWORD: blogpass
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: |
+          pip install -r requirements.txt
+
+      - name: Lint with flake8
+        working-directory: ./backend
+        run: |
+          flake8 . --count --max-line-length=120 --exclude=migrations --statistics
+
+      - name: Run tests
+        working-directory: ./backend
+        env:
+          SECRET_KEY: ci-test-secret-key
+          DEBUG: "True"
+          DB_NAME: blogdb
+          DB_USER: bloguser
+          DB_PASSWORD: blogpass
+          DB_HOST: localhost
+          DB_PORT: "5432"
+          ALLOWED_HOSTS: "localhost,127.0.0.1"
+          CORS_ALLOWED_ORIGINS: "http://localhost:3000"
+        run: |
+          pytest tests.py -v
+
+  build-and-push:
+    needs: lint-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./docker/Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/django-blog:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/django-blog:${{ github.sha }}
