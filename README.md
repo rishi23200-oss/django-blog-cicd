@@ -59,7 +59,7 @@ docker push YOUR_DOCKERHUB_USERNAME/django-blog:latest
 - Netlify Link: https://gleaming-kangaroo-44a074.netlify.app
 
 ### Backend (AWS Kubernetes)
-- AWS Backend URL: (add after deploy)
+- AWS Backend URL: http://13.201.135.175
 
 ### Monitoring
 - Grafana Dashboard: (add after deploy)
