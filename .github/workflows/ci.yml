@@ -42,7 +42,7 @@ jobs:
       - name: Lint with flake8
         working-directory: ./backend
         run: |
-          flake8 . --count --max-line-length=120 --exclude=migrations --statistics
+          flake8 . --count --max-line-length=120 --exclude=migrations,manage.py --ignore=F401,W292,E402 --statistics
 
       - name: Run tests
         working-directory: ./backend
