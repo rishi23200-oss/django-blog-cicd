@@ -53,7 +53,7 @@ type: Opaque
 stringData:
   SECRET_KEY: "django-super-secret-key-production-2026"
   DEBUG: "False"
-  ALLOWED_HOSTS: "3.110.220.110,localhost"
+  ALLOWED_HOSTS: "*"
   DB_NAME: "blogdb"
   DB_USER: "bloguser"
   DB_PASSWORD: "blogpass"
