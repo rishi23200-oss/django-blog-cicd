@@ -4,14 +4,11 @@ metadata:
   name: django-blog-ingress
   namespace: default
   annotations:
-    kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/proxy-body-size: "10m"
-    nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
-    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
 spec:
+  ingressClassName: traefik
   rules:
-    - host: your-aws-domain.com   # Replace with your domain or AWS ELB hostname
-      http:
+    - http:
         paths:
           - path: /
             pathType: Prefix
