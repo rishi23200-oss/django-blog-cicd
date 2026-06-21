@@ -56,10 +56,16 @@ docker push YOUR_DOCKERHUB_USERNAME/django-blog:latest
 ```
 
 ### Frontend (Netlify)
-- Netlify Link: https://gleaming-kangaroo-44a074.netlify.app
+- Live Link: https://gleaming-kangaroo-44a074.netlify.app
 
-### Backend (AWS Kubernetes)
-- AWS Backend URL: http://13.201.135.175
+### Backend (AWS Kubernetes - k3s on EC2)
+- Live API (HTTPS): https://3.109.216.143.nip.io
+- Health check: https://3.109.216.143.nip.io/health/
+- Admin panel: https://3.109.216.143.nip.io/admin/ (user: rishi)
 
-### Monitoring
-- Grafana Dashboard: (add after deploy)
+### DockerHub
+- Image: https://hub.docker.com/r/rishikesh1207/django-blog
+
+### Monitoring (Prometheus + Grafana + Loki)
+- Grafana Dashboard: http://3.109.216.143:32341 (user: admin / pass: admin123)
+- Logs query in Grafana → Explore → Loki: {namespace="default"}
