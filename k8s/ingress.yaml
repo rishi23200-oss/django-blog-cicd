@@ -5,10 +5,15 @@ metadata:
   namespace: default
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+    traefik.ingress.kubernetes.io/router.tls.certresolver: le
 spec:
   ingressClassName: traefik
+  tls:
+    - hosts:
+        - 3.109.216.143.nip.io
   rules:
-    - http:
+    - host: 3.109.216.143.nip.io
+      http:
         paths:
           - path: /
             pathType: Prefix
