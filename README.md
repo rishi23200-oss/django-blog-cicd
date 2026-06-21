@@ -1,7 +1,11 @@
 # Django Blog with CI/CD and Kubernetes Deployment
 
 ## Project Structure
-
+/backend – Django REST API
+/frontend – HTML+JS Frontend
+/docker – Dockerfile, docker-compose.yml, nginx config
+/k8s – Kubernetes manifests (deployment, service, ingress)
+/.github/workflows/ – CI and CD pipelines
 
 ## Local Run Steps
 
@@ -11,7 +15,7 @@
 ### Steps
 ```bash
 # 1. Clone the repo
-git clone https://github.com/YOUR_USERNAME/django-blog-cicd.git
+git clone https://github.com/rishi23200-oss/django-blog-cicd
 cd django-blog-cicd
 
 # 2. Create .env file
@@ -51,9 +55,10 @@ docker compose exec web python manage.py createsuperuser
 
 ### DockerHub
 ```bash
-docker build -t YOUR_DOCKERHUB_USERNAME/django-blog:latest ./backend
-docker push YOUR_DOCKERHUB_USERNAME/django-blog:latest
+docker build -t rishikesh1207/django-blog:latest ./backend
+docker push rishikesh1207/django-blog:latest
 ```
+- Image: https://hub.docker.com/r/rishikesh1207/django-blog
 
 ### Frontend (Netlify)
 - Live Link: https://gleaming-kangaroo-44a074.netlify.app
@@ -63,8 +68,12 @@ docker push YOUR_DOCKERHUB_USERNAME/django-blog:latest
 - Health check: https://3.109.216.143.nip.io/health/
 - Admin panel: https://3.109.216.143.nip.io/admin/ (user: rishi)
 
-### DockerHub
-- Image: https://hub.docker.com/r/rishikesh1207/django-blog
+### Kubernetes Deployment Commands
+```bash
+sudo k3s kubectl apply -f k8s/deployment.yaml
+sudo k3s kubectl apply -f k8s/service.yaml
+sudo k3s kubectl apply -f k8s/ingress.yaml
+```
 
 ### Monitoring (Prometheus + Grafana + Loki)
 - Grafana Dashboard: http://3.109.216.143:32341 (user: admin / pass: admin123)
